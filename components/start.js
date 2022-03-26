@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Image, ImageBackground } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, Image, ImageBackground, Pressable } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //Assets 
 
@@ -38,10 +39,37 @@ export default class StartScreen extends React.Component {
                         <View style={styles.colorBox}>
                             <Text style={styles.colorText}> Choose Background Color:</Text>
                         </View>
-                        <Button
-                            title="Start Chatting!"
-                            onPress={() => this.props.navigation.navigate('ChatScreen')}
-                        />
+
+                        <View style={styles.colorArray}>
+                            <TouchableOpacity
+                                style={styles.color1}
+                                onPress={() => this.changeBgColor(this.colors.dark)}>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.color2}
+                                onPress={() => this.changeBgColor(this.colors.purple)}>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.color3}
+                                onPress={() => this.changeBgColor(this.colors.blue)}>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.color3}
+                                onPress={() => this.changeBgColor(this.colors.green)}>
+                            </TouchableOpacity>
+                        </View>
+
+                        <Pressable
+                            style={styles.button}
+                            onPress={() => this.props.navigation.navigate('ChatScreen', {
+                                name: this.state.name,
+                                bgColor: this.state.bgColor
+                            })}>
+                            <Text style={styles.buttonText}>Start Chatting!</Text>
+                        </Pressable>
                     </View>
                 </ImageBackground>
             </View>
@@ -99,5 +127,42 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#FFFFFF',
         padding: 20,
+    },
+    color1: {
+        backgroundColor: '#090C08',
+        width: 50,
+        height: 50,
+        borderRadius: 25
+    },
+    color2: {
+        backgroundColor: '#474056',
+        width: 50,
+        height: 50,
+        borderRadius: 25
+    },
+    color3: {
+        backgroundColor: '#8A95A5',
+        width: 50,
+        height: 50,
+        borderRadius: 25
+    },
+    color4: {
+        backgroundColor: '#B9C6AE',
+        width: 50,
+        height: 50,
+        borderRadius: 25
+    },
+    colorArray: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '88%',
+        paddingRight: 60
+    },
+    button: {
+        width: '88%',
+        height: 70,
+        backgroundColor: '#757083',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 })
