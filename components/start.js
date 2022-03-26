@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, TextInput } from 'react-native';
 
-export default class startScreen extends React.Component {
+export default class StartScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = { text: '' }
@@ -10,11 +10,11 @@ export default class startScreen extends React.Component {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>
-                    TEST HERE
+                    TEST HERE TEST Again
                 </Text>
                 <Button
                     title="Go to Screen 2"
-                    onPress={() => this.props.navigation.navigate('INSERT CHAT STUFF HERE')}
+                    onPress={() => this.props.navigation.navigate('ChatScreen')}
                 />
             </View>
         )
