@@ -19,6 +19,7 @@ export default class StartScreen extends React.Component {
     changeBgColor = (newColor) => {
         this.setState({ bgColor: newColor })
     };
+
     //Declaring an array of colors
     colors = {
         black: '#090C08',
