@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, Button, TextInput, StyleSheet, Image, ImageBackground, Pressable } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-//Assets 
-
+//Creating constant variables for assets including the icon used in the inputBox and the background image 
 const image = require('../assets/BackgroundImage.png');
 const icon = require('../assets/personIcon.svg')
 
+//Setting the initial state of name to blank and bgColor to be purple
 export default class StartScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -15,11 +15,11 @@ export default class StartScreen extends React.Component {
             bgColor: this.colors.purple,
         }
     }
-
+    //Function to change the background color to the color selected
     changeBgColor = (newColor) => {
         this.setState({ bgColor: newColor })
     };
-
+    //Declaring an array of colors
     colors = {
         black: '#090C08',
         purple: '#474056',
@@ -31,13 +31,7 @@ export default class StartScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                    <View
-                        accessible={false}
-                        accessibilityLabel="Chat App"
-                        accessibilityHint="Chat App title"
-                        accessibilityRole="header"
-                        style={styles.titleBox}
-                    >
+                    <View>
                         <Text style={styles.title}>ChatApp</Text>
                     </View>
                     <View style={styles.loginBox}>
@@ -77,7 +71,7 @@ export default class StartScreen extends React.Component {
                             </TouchableOpacity>
                         </View>
 
-                        <Pressable
+                        <Pressable //This is the React Native component for a pressable element. 
                             style={styles.button}
                             onPress={() => this.props.navigation.navigate('ChatScreen', {
                                 name: this.state.name,
@@ -91,10 +85,13 @@ export default class StartScreen extends React.Component {
         )
     }
 }
+
+//Declaring style sheet
+
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: "column",
+        flex: 1, //Keeping it at 1 and a column makes the container for the entire space. 
+        flexDirection: "column", //This establishes the direction for the container. 
     },
     image: {
         flex: 1,
@@ -179,5 +176,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#757083',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    buttonText: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#FFFFFF',
+        textAlign: 'center',
+        padding: 20,
     },
 })
