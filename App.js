@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, Alert, ScrollView } from 'react-native';
+import { Text, View, TextInput, Button, Alert, ScrollView } from 'react-native';
 import StartScreen from './components/Start';
 import ChatScreen from './components/Chat';
 import 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { StyleSheet } from 'react-native';
 
 
 const Stack = createStackNavigator();
