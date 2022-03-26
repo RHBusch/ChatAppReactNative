@@ -10,8 +10,23 @@ const icon = require('../assets/personIcon.svg')
 export default class StartScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { name: '' }
+        this.state = {
+            name: '',
+            bgColor: this.colors.purple,
+        }
     }
+
+    changeBgColor = (newColor) => {
+        this.setState({ bgColor: newColor })
+    };
+
+    colors = {
+        black: '#090C08',
+        purple: '#474056',
+        blue: '#8A95A5',
+        green: '#B9C6AE',
+    };
+
     render() {
         return (
             <View style={styles.container}>
