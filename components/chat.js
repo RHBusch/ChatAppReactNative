@@ -74,7 +74,7 @@ export default class ChatScreen extends React.Component {
     }
 
     render() {
-        let name = this.props.route.params.name;
+        let name = this.props.route.params.name; // pulling directly from the navigate function and the button on start.js line 104
         this.props.navigation.setOptions({ title: name });
         const { bgColor } = this.props.route.params;
         return (
