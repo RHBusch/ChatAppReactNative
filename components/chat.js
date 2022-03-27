@@ -9,13 +9,15 @@ export default class ChatScreen extends React.Component {
             messages: [],
         }
     }
+
+    //Using componentDidMount to follow the ChatScreen component mounting to set state, etc.
     componentDidMount() {
         const name = this.props.route.params.name;
         this.setState({
             messages: [
                 {
                     _id: 1,
-                    text: 'Hello developer',
+                    text: 'Hello developer', //This is the initial message
                     createdAt: new Date(),
                     user: {
                         _id: 2,
@@ -25,7 +27,7 @@ export default class ChatScreen extends React.Component {
                 },
                 {
                     _id: 2,
-                    text: name + ' is now in the chat room!',
+                    text: name + ' is now in the chat room!', //This is the system message. 
                     createdAt: new Date(),
                     system: true,
                     fontColor: '#000'
@@ -34,12 +36,20 @@ export default class ChatScreen extends React.Component {
         })
     }
 
+    /*In the code below, the function setState() is called with the parameter previousState, 
+    which is a reference to the component’s state at the time the change is applied. 
+    Then comes the append() function provided by GiftedChat, which appends the new message to the messages object. 
+    
+    The message a user has just sent gets appended to the state messages so 
+    that it can be displayed in the chat. */
+
     onSend(messages = []) {
         this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages)
         }))
     }
 
+    //Editing the chat bubble color here. 
     renderBubble(props) {
         return (
             <Bubble
@@ -52,7 +62,7 @@ export default class ChatScreen extends React.Component {
             />
         )
     }
-
+    //Editing the system message font style here
     renderSystemMessage(props) {
         const { bgColor } = this.props.route.params;
         return (
@@ -71,8 +81,8 @@ export default class ChatScreen extends React.Component {
             <View
                 style={{ flex: 1, justifyContent: 'center', backgroundColor: bgColor }}>
                 <GiftedChat
-                    renderBubble={this.renderBubble.bind(this)}
-                    renderSystemMessage={this.renderSystemMessage.bind(this)}
+                    renderBubble={this.renderBubble.bind(this)} //calling the bubble style function above
+                    renderSystemMessage={this.renderSystemMessage.bind(this)} // calling the system style function above
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     user={{
@@ -80,7 +90,7 @@ export default class ChatScreen extends React.Component {
                     }}
                 />
                 {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
-            </View>
+            </View> // The KeyboardAvoidingView fixes a common error encountered in Android testing where the keyboard covers the chat section.
         )
     }
 }
