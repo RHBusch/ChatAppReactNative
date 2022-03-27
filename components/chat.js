@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button, TextInput, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 
 export default class ChatScreen extends React.Component {
     constructor() {
@@ -38,6 +38,19 @@ export default class ChatScreen extends React.Component {
         }))
     }
 
+    renderBubble(props) {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    right: {
+                        backgroundColor: '#000'
+                    }
+                }}
+            />
+        )
+    }
+
     render() {
         let name = this.props.route.params.name;
         this.props.navigation.setOptions({ title: name });
@@ -45,6 +58,7 @@ export default class ChatScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <GiftedChat
+                    renderBubble={this.renderBubble.bind(this)}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     user={{
