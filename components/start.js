@@ -53,7 +53,7 @@ export default class StartScreen extends React.Component {
                         <View style={styles.colorArray}>
                             <TouchableOpacity
                                 style={styles.color1}
-                                onPress={() => this.changeBgColor(this.colors.dark)}>
+                                onPress={() => this.changeBgColor(this.colors.black)}>
                             </TouchableOpacity>
 
                             <TouchableOpacity

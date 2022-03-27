@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button, TextInput, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble, SystemMessage } from 'react-native-gifted-chat'
 
 export default class ChatScreen extends React.Component {
     constructor() {
@@ -10,6 +10,7 @@ export default class ChatScreen extends React.Component {
         }
     }
     componentDidMount() {
+        const name = this.props.route.params.name;
         this.setState({
             messages: [
                 {
@@ -24,9 +25,10 @@ export default class ChatScreen extends React.Component {
                 },
                 {
                     _id: 2,
-                    text: 'This is a system message',
+                    text: name + ' is now in the chat room!',
                     createdAt: new Date(),
                     system: true,
+                    fontColor: '#000'
                 }
             ],
         })
@@ -44,9 +46,19 @@ export default class ChatScreen extends React.Component {
                 {...props}
                 wrapperStyle={{
                     right: {
-                        backgroundColor: '#000'
+                        backgroundColor: 'blue'
                     }
                 }}
+            />
+        )
+    }
+
+    renderSystemMessage(props) {
+        const { bgColor } = this.props.route.params;
+        return (
+            <SystemMessage
+                {...props}
+                textStyle={{ color: 'white', fontSize: 16, fontWeight: '600' }}
             />
         )
     }
@@ -56,9 +68,11 @@ export default class ChatScreen extends React.Component {
         this.props.navigation.setOptions({ title: name });
         const { bgColor } = this.props.route.params;
         return (
-            <View style={styles.container}>
+            <View
+                style={{ flex: 1, justifyContent: 'center', backgroundColor: bgColor }}>
                 <GiftedChat
                     renderBubble={this.renderBubble.bind(this)}
+                    renderSystemMessage={this.renderSystemMessage.bind(this)}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     user={{
@@ -70,10 +84,3 @@ export default class ChatScreen extends React.Component {
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: "column",
-    }
-})
