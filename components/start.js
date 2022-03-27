@@ -33,12 +33,18 @@ export default class StartScreen extends React.Component {
             <View style={styles.container}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                     <View>
-                        <Text style={styles.title}>ChatApp</Text>
+                        <Text style={styles.title}
+                            accessible={true}
+                            accessibilityLabel="The title of the app is Chat App"
+                        >ChatApp</Text>
                     </View>
                     <View style={styles.loginBox}>
                         <View style={styles.inputBox}>
                             <Image source={icon} style={styles.userIcon} />
                             <TextInput
+                                accessible={true}
+                                accessibilityLabel="Your Name"
+                                accessibilityHint="You can enter your name in this box. It will be the name you use when you're chatting."
                                 style={styles.input}
                                 onChangeText={(text) => this.setState({ name: text })}
                                 value={this.state.name}
@@ -51,28 +57,49 @@ export default class StartScreen extends React.Component {
                         </View>
 
                         <View style={styles.colorArray}>
+
                             <TouchableOpacity
+                                accessible={true}
+                                accessibilityLabel="A black background"
+                                accessibilityHint="Add a black background to your chat screen"
+                                accessibilityRole="button"
                                 style={styles.color1}
                                 onPress={() => this.changeBgColor(this.colors.black)}>
                             </TouchableOpacity>
 
                             <TouchableOpacity
+                                accessible={true}
+                                accessibilityLabel="A purple background"
+                                accessibilityHint="Add a purple background to your chat screen"
+                                accessibilityRole="button"
                                 style={styles.color2}
                                 onPress={() => this.changeBgColor(this.colors.purple)}>
                             </TouchableOpacity>
 
                             <TouchableOpacity
+                                accessible={true}
+                                accessibilityLabel="A blue background"
+                                accessibilityHint="Add a blue background to your chat screen"
+                                accessibilityRole="button"
                                 style={styles.color3}
                                 onPress={() => this.changeBgColor(this.colors.blue)}>
                             </TouchableOpacity>
 
                             <TouchableOpacity
+                                accessible={true}
+                                accessibilityLabel="A green background"
+                                accessibilityHint="Add a green background to your chat screen"
+                                accessibilityRole="button"
                                 style={styles.color4}
                                 onPress={() => this.changeBgColor(this.colors.green)}>
                             </TouchableOpacity>
                         </View>
 
                         <Pressable //This is the React Native component for a pressable element. 
+                            accessible={true}
+                            accessibilityLabel="Navigate to the next screen - the chat screen "
+                            accessibilityHint="Select to go to the chat screen"
+                            accessibilityRole="button"
                             style={styles.button}
                             onPress={() => this.props.navigation.navigate('ChatScreen', {
                                 name: this.state.name,
