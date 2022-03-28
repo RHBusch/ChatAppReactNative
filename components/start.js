@@ -101,7 +101,7 @@ export default class StartScreen extends React.Component {
                             accessibilityHint="Select to go to the chat screen"
                             accessibilityRole="button"
                             style={styles.button}
-                            onPress={() => this.props.navigation.navigate('ChatScreen', {
+                            onPress={() => this.props.navigation.navigate('ChatScreen', { //Passing the below props to chat.js
                                 name: this.state.name,
                                 bgColor: this.state.bgColor
                             })}>
