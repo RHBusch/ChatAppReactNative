@@ -2,12 +2,30 @@ import React from 'react';
 import { View, Text, Button, TextInput, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { GiftedChat, Bubble, SystemMessage } from 'react-native-gifted-chat'
 
+import firebase from "firebase/compat/app" //Importing firebase and firestore. This compatibility file seems to fix previous issues. 
+import "firebase/compat/auth"
+import "firebase/compat/firestore"
+
+
+const firebaseConfig = { //These are the config keys needed to communicate with firebase.
+    apiKey: "AIzaSyCtYAr6ZkNPg8li1_uoA-vfADIUU_4G7IA",
+    authDomain: "chatapp-9f223.firebaseapp.com",
+    projectId: "chatapp-9f223",
+    storageBucket: "chatapp-9f223.appspot.com",
+    messagingSenderId: "407593908179"
+};
+
+
 export default class ChatScreen extends React.Component {
     constructor() {
         super();
         this.state = {
             messages: [],
         }
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig); //Calling the config keys to initialize the app. 
+        }
+        this.referenceMessages = firebase.firestore().collection('messages');
     }
 
     //Using componentDidMount to follow the ChatScreen component mounting to set state, etc.
@@ -19,7 +37,7 @@ export default class ChatScreen extends React.Component {
                     _id: 1,
                     text: 'Hello developer', //This is the initial message
                     createdAt: new Date(),
-                    user: {
+                    user: { //user 
                         _id: 2,
                         name: 'React Native',
                         avatar: 'https://placeimg.com/140/140/any'
