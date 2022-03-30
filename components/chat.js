@@ -17,11 +17,14 @@ const firebaseConfig = { //These are the config keys needed to communicate with 
 
 
 export default class ChatScreen extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
         this.state = {
             messages: [],
-        }
+            uid: 0
+        };
+
+
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig); //Calling the config keys to initialize the app. 
         }
@@ -30,28 +33,18 @@ export default class ChatScreen extends React.Component {
 
     //Using componentDidMount to follow the ChatScreen component mounting to set state, etc.
     componentDidMount() {
-        const name = this.props.route.params.name;
-        this.setState({
-            messages: [
-                {
-                    _id: 1,
-                    text: 'Hello developer', //This is the initial message
-                    createdAt: new Date(),
-                    user: { //user 
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'https://placeimg.com/140/140/any'
-                    },
-                },
-                {
-                    _id: 2,
-                    text: name + ' is now in the chat room!', //This is the system message. 
-                    createdAt: new Date(),
-                    system: true,
-                    fontColor: '#000'
-                }
-            ],
-        })
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                firebase.auth().signInAnonymously();
+            }
+            this.setState({
+                uid: user.uid,
+                messages: [],
+            });
+            this.unsubscribe = this.referenceChatMessages
+                .orderBy("createdAt", "desc")
+                .onSnapshot(this.onCollectionUpdate);
+        });
     }
 
     /*In the code below, the function setState() is called with the parameter previousState, 
