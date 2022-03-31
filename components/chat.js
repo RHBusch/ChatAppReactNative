@@ -41,11 +41,50 @@ export default class ChatScreen extends React.Component {
                 uid: user.uid,
                 messages: [],
             });
-            this.unsubscribe = this.referenceChatMessages
+            this.unsubscribe = this.referenceMessages
                 .orderBy("createdAt", "desc")
                 .onSnapshot(this.onCollectionUpdate);
         });
     }
+
+
+
+
+
+
+
+    addMessages() {
+        const message = this.state.messages[0];
+        this.referenceMessages.add({
+            _id: message._id,
+            text: message.text || '',
+            createdAt: message.createdAt,
+            user: this.state.user
+        })
+    }
+
+    onCollectionUpdate = (querySnapshot) => {
+        const messages = [];
+        // go through each document
+        querySnapshot.forEach((doc) => {
+            // get the QueryDocumentSnapshot's data
+            let data = doc.data();
+            messages.push({
+                _id: data._id,
+                text: data.text,
+                createdAt: data.createdAt.toDate(),
+                user: {
+                    _id: data.user._id,
+                    name: data.user.name,
+                    avatar: data.user.avatar,
+                }
+            });
+            this.setState({
+                messages: messages
+            });
+        })
+    };
+
 
     /*In the code below, the function setState() is called with the parameter previousState, 
     which is a reference to the component’s state at the time the change is applied. 
@@ -57,7 +96,9 @@ export default class ChatScreen extends React.Component {
     onSend(messages = []) {
         this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages)
-        }))
+        }),
+            () => { this.addMessages() }
+        )
     }
 
     //Editing the chat bubble color here. 
