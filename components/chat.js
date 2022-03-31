@@ -47,8 +47,10 @@ export default class ChatScreen extends React.Component {
         });
     }
 
-
-
+    componentWillUnmount() {
+        this.authUnsubscribe();
+        this.unsubscribe();
+    }
 
 
 
@@ -84,7 +86,6 @@ export default class ChatScreen extends React.Component {
             });
         })
     };
-
 
     /*In the code below, the function setState() is called with the parameter previousState, 
     which is a reference to the component’s state at the time the change is applied. 
