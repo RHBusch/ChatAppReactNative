@@ -38,7 +38,7 @@ export default class ChatScreen extends React.Component {
     componentDidMount() {
         let { name } = this.props.route.params;
         this.props.navigation.setOptions({ title: name });
-        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => { //User authentication.
             if (!user) {
                 firebase.auth().signInAnonymously();
             }
@@ -57,12 +57,12 @@ export default class ChatScreen extends React.Component {
         });
     }
 
-    componentWillUnmount() {
+    componentWillUnmount() { //Stop listening to authentication and collection changes
         this.authUnsubscribe();
         this.unsubscribe();
     }
 
-    addMessages() {
+    addMessages() { // This is a function to add messages to firebase. referenceMessages is declared in the constructor.
         const message = this.state.messages[0];
         this.referenceMessages.add({
             _id: message._id,
