@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Button, TextInput, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { GiftedChat, Bubble, SystemMessage } from 'react-native-gifted-chat'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import firebase from "firebase/compat/app" //Importing firebase and firestore. This compatibility file seems to fix previous issues from earlier versions. 
 import "firebase/compat/auth"
