@@ -5,6 +5,16 @@ import PropTypes from 'prop-types';
 
 export default class CustomActions extends React.Component {
 
+
+
+
+    getLocation = async() //complete these
+
+    takePhoto = async()
+
+    imagePicker = async()
+
+
     onActionPress = () => {
         const options = ['Choose From Library', 'Take Picture', 'Send Location', 'Cancel'];
         const cancelButtonIndex = options.length - 1;
@@ -29,6 +39,28 @@ export default class CustomActions extends React.Component {
         )
     }
 
+    uploadImg = async (uri) => {
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest()
+            xhr.onload = function () {
+                resolve(xhr.response);
+            }
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError('Network request failed'))
+            }
+            xhr.responseType = 'blob'
+            xhr.open('GET', uri, true);
+            xhr.send(null);
+        })
+        const imageNameBefore = uri.split("/");
+        const imageName = imageNameBefore[imageNameBefore.length - 1]
+        const ref = firebase.storage().ref().child(`images/${imageName}`)
+
+        const snapshot = await ref.put(blob);
+        blob.close();
+        return await snapshot.ref.getDownloadURL();
+    }
 
     render() {
         return (
