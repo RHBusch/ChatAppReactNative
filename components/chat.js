@@ -35,6 +35,35 @@ export default class ChatScreen extends React.Component {
         this.referenceMessages = firebase.firestore().collection('messages');
     }
 
+    async getMessages() {
+        let messages = '';
+        try {
+            messages = await AsyncStorage.getItem('messages') || [];
+            this.setState({
+                messages: JSON.parse(messages)
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+    async saveMessages() {
+        try {
+            await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages))
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    async deleteMessages() {
+        try {
+            await AsyncStorage.removeItem('messages');
+            this.setState({ messages: [] })
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     //Using componentDidMount to follow the ChatScreen component mounting to set state, etc.
     componentDidMount() {
         let { name } = this.props.route.params;
@@ -106,7 +135,10 @@ export default class ChatScreen extends React.Component {
         this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages)
         }),
-            () => { this.addMessages() }
+            () => {
+                this.addMessages();
+                this.saveMessages()
+            }
         )
     }
 
