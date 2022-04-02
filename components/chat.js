@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Button, TextInput, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { GiftedChat, Bubble, SystemMessage } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble, SystemMessage, InputToolbar } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 import firebase from "firebase/compat/app" //Importing firebase and firestore. This compatibility file seems to fix previous issues from earlier versions. 
 import "firebase/compat/auth"
@@ -68,24 +69,37 @@ export default class ChatScreen extends React.Component {
     componentDidMount() {
         let { name } = this.props.route.params;
         this.props.navigation.setOptions({ title: name });
-        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => { //User authentication.
-            if (!user) {
-                firebase.auth().signInAnonymously();
+
+
+        NetInfo.fetch().then(connection => {
+            if (connection.isConnected) {
+                console.log('online');
+                this.setState({ isConnected: true })
+                this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => { //User authentication.
+                    if (!user) {
+                        firebase.auth().signInAnonymously();
+                    }
+                    this.setState({
+                        uid: user.uid,
+                        messages: [],
+                        user: {
+                            _id: user.uid,
+                            name: name,
+                            avatar: 'https://placeimg.com/140/140/any',
+                        }
+                    });
+                    this.unsubscribe = this.referenceMessages
+                        .orderBy("createdAt", "desc")
+                        .onSnapshot(this.onCollectionUpdate);
+                });
+            } else {
+                console.log('offline');
+                this.getMessages();
+                this.setState({ isConnected: false })
             }
-            this.setState({
-                uid: user.uid,
-                messages: [],
-                user: {
-                    _id: user.uid,
-                    name: name,
-                    avatar: 'https://placeimg.com/140/140/any',
-                }
-            });
-            this.unsubscribe = this.referenceMessages
-                .orderBy("createdAt", "desc")
-                .onSnapshot(this.onCollectionUpdate);
         });
     }
+
 
     componentWillUnmount() { //Stop listening to authentication and collection changes
         this.authUnsubscribe();
@@ -166,6 +180,17 @@ export default class ChatScreen extends React.Component {
         )
     }
 
+    renderInputToolbar(props) {
+        if (this.state.isConnected == false) {
+        } else {
+            return (
+                <InputToolbar
+                    {...props}
+                />
+            );
+        }
+    }
+
     render() {
         let name = this.props.route.params.name; // pulling directly from the navigate function and the button on start.js line 104
         this.props.navigation.setOptions({ title: name });
@@ -176,6 +201,7 @@ export default class ChatScreen extends React.Component {
                 <GiftedChat
                     renderBubble={this.renderBubble.bind(this)} //calling the bubble style function above
                     renderSystemMessage={this.renderSystemMessage.bind(this)} // calling the system style function above
+                    renderInputToolbar={this.renderInputToolbar.bind(this)} //calling the renderInputToolbar function above
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     user={{
