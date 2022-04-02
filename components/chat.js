@@ -28,7 +28,10 @@ export default class ChatScreen extends React.Component {
                 _id: "",
                 name: "",
                 avatar: "",
-            }
+            },
+            isConnected: false,
+            image: null,
+            location: null,
         };
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig); //Calling the config keys to initialize the app. 
@@ -112,8 +115,10 @@ export default class ChatScreen extends React.Component {
             _id: message._id,
             text: message.text || '',
             createdAt: message.createdAt,
-            user: this.state.user
-        })
+            user: this.state.user,
+            image: message.image || "",
+            location: message.location || null,
+        });
     }
 
     onCollectionUpdate = (querySnapshot) => {
@@ -130,7 +135,9 @@ export default class ChatScreen extends React.Component {
                     _id: data.user._id,
                     name: data.user.name,
                     avatar: data.user.avatar,
-                }
+                },
+                image: data.image || null,
+                location: data.location || null,
             });
             this.setState({
                 messages: messages
@@ -191,6 +198,29 @@ export default class ChatScreen extends React.Component {
         }
     }
 
+    renderCustomView(props) {
+        const { currentMessage } = props;
+        if (currentMessage.location) {
+            return (
+                <MapView
+                    style={{
+                        width: 150,
+                        height: 100,
+                        borderRadius: 13,
+                        margin: 3
+                    }}
+                    region={{
+                        latitude: currentMessage.location.latitude,
+                        longitude: currentMessage.location.longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
+            )
+        }
+        return null;
+    }
+
     render() {
         let name = this.props.route.params.name; // pulling directly from the navigate function and the button on start.js line 104
         this.props.navigation.setOptions({ title: name });
@@ -202,6 +232,7 @@ export default class ChatScreen extends React.Component {
                     renderBubble={this.renderBubble.bind(this)} //calling the bubble style function above
                     renderSystemMessage={this.renderSystemMessage.bind(this)} // calling the system style function above
                     renderInputToolbar={this.renderInputToolbar.bind(this)} //calling the renderInputToolbar function above
+                    renderActions={this.renderCustomActions}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     user={{
