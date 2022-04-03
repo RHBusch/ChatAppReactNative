@@ -3,6 +3,9 @@ import { View, Text, Button, TextInput, StyleSheet, Image, ImageBackground, Pres
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
+import firebase from "firebase";
+import "firebase/firestore";
+
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -13,7 +16,7 @@ export default class CustomActions extends React.Component {
             const { status } = await Permissions.askAsync(Permissions.LOCATION);
             if (status === "granted") {
                 const result = await
-                    Location.getCurrentPositionAsync(
+                    location.getCurrentPositionAsync(
                         {}
                     ).catch((error) => console.log(error));
                 const longitude = JSON.stringify(result.coords.longitude);
@@ -33,16 +36,14 @@ export default class CustomActions extends React.Component {
     };
 
     imagePicker = async () => {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         try {
             if (status === "granted") {
-                const result = await
-                    this.imagePicker.launchImageLibraryAsync({
-                        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                    }).catch((error) => console.log(error))
+                let result = await ImagePicker.launchImageLibraryAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                }).catch((error) => console.log(error))
                 if (!result.cancelled) {
-                    const imageUrl = await
-                        this.uploadImageFetch(result.uri);
+                    const imageUrl = await this.uploadImg(result.uri);
                     this.props.onSend({ image: imageUrl })
                 }
             }
@@ -52,18 +53,15 @@ export default class CustomActions extends React.Component {
     }
 
     takePhoto = async () => {
-        const { status } = await Permissions.askAsync(
-            Permissions.CAMERA,
-            Permissions.CAMERA_ROLL
-        );
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
         try {
             if (status === "granted") {
-                const result = await ImagePicker.launchCameraAsync({
+                let result = await ImagePicker.launchCameraAsync({
                     mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 }).catch((error) => console.log(error))
 
                 if (!result.cancelled) {
-                    const imageUrl = await this.uploadImageFetch(result.uri);
+                    const imageUrl = await this.uploadImg(result.uri);
                     this.props.onSend({ image: imageUrl });
                 }
             }
