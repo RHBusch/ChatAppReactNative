@@ -5,15 +5,67 @@ import PropTypes from 'prop-types';
 
 export default class CustomActions extends React.Component {
 
+    getLocation = async () => {
+        try {
+            const { status } = await Permissions.askAsync(Permissions.LOCATION);
+            if (status === "granted") {
+                const result = await
+                    Location.getCurrentPositionAsync(
+                        {}
+                    ).catch((error) => console.log(error));
+                const longitude = JSON.stringify(result.coords.longitude);
+                const altitude = JSON.stringify(result.coords.latitude);
+                if (result) {
+                    this.props.onSend({
+                        location: {
+                            longitude: result.coords.longitude,
+                            latitude: result.coords.latitude,
+                        },
+                    });
+                }
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
+    };
 
+    imagePicker = async () => {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        try {
+            if (status === "granted") {
+                const result = await
+                    this.imagePicker.launchImageLibraryAsync({
+                        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                    }).catch((error) => console.log(error))
+                if (!result.cancelled) {
+                    const imageUrl = await
+                        this.uploadImageFetch(result.uri);
+                    this.props.onSend({ image: imageUrl })
+                }
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
+    takePhoto = async () => {
+        const { status } = await Permissions.askAsync(
+            Permissions.CAMERA,
+            Permissions.CAMERA_ROLL
+        );
+        try {
+            if (status === "granted") {
+                const result = await ImagePicker.launchCameraAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                }).catch((error) => console.log(error))
 
-    getLocation = async() //complete these
-
-    takePhoto = async()
-
-    imagePicker = async()
-
+                if (!result.cancelled) {
+                    const imageUrl = await this.uploadImageFetch(result.uri);
+                    this.props.onSend({ image: imageUrl });
+                }
+            }
+        } catch (error) { console.log(error.message) }
+    }
 
     onActionPress = () => {
         const options = ['Choose From Library', 'Take Picture', 'Send Location', 'Cancel'];
@@ -27,18 +79,17 @@ export default class CustomActions extends React.Component {
                 switch (buttonIndex) {
                     case 0:
                         console.log('user wants to pick an image');
-                        return;
+                        return this.imagePicker();
                     case 1:
                         console.log('user wants to take a photo')
-                        return;
+                        return this.takePhoto();
                     case 2:
                         console.log('user wants to get their location');
-                    default:
+                        return this.getLocation();
                 }
             }
         )
     }
-
     uploadImg = async (uri) => {
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest()
