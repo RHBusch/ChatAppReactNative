@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Image, ImageBackground, Pressable } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, Button, TextInput, StyleSheet, Image, ImageBackground, Pressable, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
-import firebase from "firebase";
-import "firebase/firestore";
+import firebase from 'firebase/compat/app';
+import 'firebase/storage';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -41,16 +42,18 @@ export default class CustomActions extends React.Component {
             if (status === "granted") {
                 let result = await ImagePicker.launchImageLibraryAsync({
                     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                }).catch((error) => console.log(error))
+                }).catch((error) => {
+                    console.error(error)
+                });
                 if (!result.cancelled) {
                     const imageUrl = await this.uploadImg(result.uri);
                     this.props.onSend({ image: imageUrl })
                 }
             }
         } catch (error) {
-            console.log(error.message);
+            console.error(error);
         }
-    }
+    };
 
     takePhoto = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -67,6 +70,28 @@ export default class CustomActions extends React.Component {
             }
         } catch (error) { console.log(error.message) }
     }
+    uploadImg = async (uri) => {
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', uri, true);
+            xhr.send(null);
+        });
+        const imageNameBefore = uri.split("/");
+        const imageName = imageNameBefore[imageNameBefore.length - 1];
+        const ref = firebase.storage().ref().child(`images/${imageName}`);
+
+        const snapshot = await ref.put(blob);
+        blob.close();
+        return await snapshot.ref.getDownloadURL();
+    };
 
     onActionPress = () => {
         const options = ['Choose From Library', 'Take Picture', 'Send Location', 'Cancel'];
@@ -90,28 +115,6 @@ export default class CustomActions extends React.Component {
                 }
             }
         )
-    }
-    uploadImg = async (uri) => {
-        const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest()
-            xhr.onload = function () {
-                resolve(xhr.response);
-            }
-            xhr.onerror = function (e) {
-                console.log(e);
-                reject(new TypeError('Network request failed'))
-            }
-            xhr.responseType = 'blob'
-            xhr.open('GET', uri, true);
-            xhr.send(null);
-        })
-        const imageNameBefore = uri.split("/");
-        const imageName = imageNameBefore[imageNameBefore.length - 1]
-        const ref = firebase.storage().ref().child(`images/${imageName}`)
-
-        const snapshot = await ref.put(blob);
-        blob.close();
-        return await snapshot.ref.getDownloadURL();
     }
 
     render() {

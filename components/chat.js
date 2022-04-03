@@ -4,9 +4,9 @@ import { GiftedChat, Bubble, SystemMessage, InputToolbar } from 'react-native-gi
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
-import firebase from "firebase/compat/app" //Importing firebase and firestore. This compatibility file seems to fix previous issues from earlier versions. 
-import "firebase/compat/auth"
-import "firebase/compat/firestore"
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 import CustomActions from './CustomActions'
 
@@ -16,7 +16,9 @@ const firebaseConfig = { //These are the config keys needed to communicate with 
     authDomain: "chatapp-9f223.firebaseapp.com",
     projectId: "chatapp-9f223",
     storageBucket: "chatapp-9f223.appspot.com",
-    messagingSenderId: "407593908179"
+    messagingSenderId: "407593908179",
+    messagingSenderId: "407593908179",
+    appId: "1:407593908179:web:6c86f7e3aec2e240dda126"
 };
 
 
