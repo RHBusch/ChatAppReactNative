@@ -8,6 +8,8 @@ import firebase from "firebase/compat/app" //Importing firebase and firestore. T
 import "firebase/compat/auth"
 import "firebase/compat/firestore"
 
+import CustomActions from './CustomActions'
+
 
 const firebaseConfig = { //These are the config keys needed to communicate with firebase.
     apiKey: "AIzaSyCtYAr6ZkNPg8li1_uoA-vfADIUU_4G7IA",

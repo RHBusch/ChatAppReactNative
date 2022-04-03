@@ -3,6 +3,9 @@ import { View, Text, Button, TextInput, StyleSheet, Image, ImageBackground, Pres
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+
 export default class CustomActions extends React.Component {
 
     getLocation = async () => {
