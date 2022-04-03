@@ -197,6 +197,7 @@ export default class ChatScreen extends React.Component {
             );
         }
     }
+    renderCustomActions = (props) => <CustomActions {...props} />;
 
     renderCustomView(props) {
         const { currentMessage } = props;
