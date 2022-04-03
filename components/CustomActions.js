@@ -3,9 +3,11 @@ import { View, Text, Button, TextInput, StyleSheet, Image, ImageBackground, Pres
 import PropTypes from 'prop-types';
 
 import firebase from 'firebase/compat/app';
-import 'firebase/storage';
+import 'firebase/compat/storage';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+
+
 
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -46,7 +48,7 @@ export default class CustomActions extends React.Component {
                     console.error(error)
                 });
                 if (!result.cancelled) {
-                    const imageUrl = await this.uploadImg(result.uri);
+                    const imageUrl = await this.uploadImage(result.uri);
                     this.props.onSend({ image: imageUrl })
                 }
             }
@@ -64,13 +66,13 @@ export default class CustomActions extends React.Component {
                 }).catch((error) => console.log(error))
 
                 if (!result.cancelled) {
-                    const imageUrl = await this.uploadImg(result.uri);
+                    const imageUrl = await this.uploadImage(result.uri);
                     this.props.onSend({ image: imageUrl });
                 }
             }
         } catch (error) { console.log(error.message) }
     }
-    uploadImg = async (uri) => {
+    uploadImage = async (uri) => {
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
