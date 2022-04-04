@@ -11,6 +11,7 @@ import 'firebase/compat/firestore';
 
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 
 export default class CustomActions extends React.Component {
 
