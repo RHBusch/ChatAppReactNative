@@ -17,7 +17,7 @@ const firebaseConfig = { //These are the config keys needed to communicate with 
     apiKey: "AIzaSyCtYAr6ZkNPg8li1_uoA-vfADIUU_4G7IA",
     authDomain: "chatapp-9f223.firebaseapp.com",
     projectId: "chatapp-9f223",
-    storageBucket: "gs://chatapp-9f223.appspot.com",
+    storageBucket: "gs://chatapp-9f223",
     messagingSenderId: "407593908179",
     messagingSenderId: "407593908179",
     appId: "1:407593908179:web:6c86f7e3aec2e240dda126"
