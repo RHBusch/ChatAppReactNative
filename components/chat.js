@@ -3,6 +3,7 @@ import { View, Text, Button, TextInput, Platform, KeyboardAvoidingView, StyleShe
 import { GiftedChat, Bubble, SystemMessage, InputToolbar } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import MapView from 'react-native-maps';
 
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -237,6 +238,7 @@ export default class ChatScreen extends React.Component {
                     renderBubble={this.renderBubble.bind(this)} //calling the bubble style function above
                     renderSystemMessage={this.renderSystemMessage.bind(this)} // calling the system style function above
                     renderInputToolbar={this.renderInputToolbar.bind(this)} //calling the renderInputToolbar function above
+                    renderCustomView={this.renderCustomView}
                     renderActions={this.renderCustomActions}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}

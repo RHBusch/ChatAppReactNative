@@ -16,15 +16,16 @@ import * as Location from 'expo-location';
 export default class CustomActions extends React.Component {
 
     getLocation = async () => {
+        // Permission to access user location
+        const { status } = await Location.requestForegroundPermissionsAsync();
         try {
-            const { status } = await Permissions.askAsync(Permissions.LOCATION);
-            if (status === "granted") {
-                const result = await
-                    location.getCurrentPositionAsync(
-                        {}
-                    ).catch((error) => console.log(error));
-                const longitude = JSON.stringify(result.coords.longitude);
-                const altitude = JSON.stringify(result.coords.latitude);
+            if (status === 'granted') {
+                let result = await Location.getCurrentPositionAsync({}).catch(
+                    (error) => {
+                        console.error(error);
+                    }
+                );
+                // Send latitude and longitude to locate the position on the map
                 if (result) {
                     this.props.onSend({
                         location: {
@@ -35,7 +36,7 @@ export default class CustomActions extends React.Component {
                 }
             }
         } catch (error) {
-            console.log(error.message)
+            console.error(error);
         }
     };
 
