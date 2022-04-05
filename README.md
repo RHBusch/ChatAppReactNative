@@ -21,6 +21,25 @@ before joining the chat.
 and location data.
 * Data gets stored online and offline.
 
-##To Start
+## Installation 
 
-* Navigate to the root folder - npm start
+* Either fork or download this repo to begin. 
+* Enter npm install or yarn install in the terminal to install all the relevant dependencies. 
+
+### Prerequisites 
+* You will need to download Expo if you have not done so already npm install expo-cli --global
+* You may register for an account here: https://expo.dev/.
+* Downloading Expo Go for your use on your personal device is also helpful. 
+
+## Using the App 
+* Enter npm start or expo start in the terminal 
+* Expo will load giving you a link like the following: Developer tools running on "http://localhost:19002"
+* You can click the link through to the "metro bundler" and then select a simulator / emulator of your choice. 
+* Alternatively you can use a smart phone to scan the QR code provided in your terminal and open the Expo app on your device. 
+
+## Key Technologies
+* React Native 
+* Gifted Chat
+* Expo 
+* Google Firestore
+
