@@ -1,4 +1,9 @@
 # ChatAppReactNative
+<p align="center">
+<img src="img/chat2.png" width="200">
+<img src= "img/chat.png" width="200">
+<img src="img/chat3.png" width="200">
+</p>
 
 ## User Stories
 * As a new user, I want to be able to easily enter a chat room so I can quickly start talking to my
